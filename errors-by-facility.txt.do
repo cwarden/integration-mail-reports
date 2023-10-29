@@ -2,12 +2,12 @@ exec >&2
 
 redo-ifchange parsed/*.txt
 
-grep -h 'Message ' parsed/* | \
-	sed -e 's/Message Type/Message_Type/g' |
+grep -Eh '(Message |Originating)' parsed/* | \
+	perl -pe 's/Message Type/Message_Type/g; s/Originating Facility/Originating_Facility/g;' |
 	awk '
 		{ $1 = ""}
 		{
-			if (NR % 2 == 0) {
+			if (NR % 3 == 0) {
 				print $0
 			} else {
 				printf "%s ", $0
