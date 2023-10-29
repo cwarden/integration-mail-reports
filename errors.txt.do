@@ -1,7 +1,16 @@
 exec >&2
 
-grep -h 'Message  ' parsed/* | \
-	awk '{ $1 = ""; print }' | \
+grep -h 'Message ' parsed/* | \
+	sed -e 's/Message Type/Message_Type/g' |
+	awk '
+		{ $1 = ""}
+		{
+			if (NR % 2 == 0) {
+				print $0
+			} else {
+				printf "%s ", $0
+			}
+		}' | \
 	perl -pe '
 		s/\d{4}-\d{3}-\d+-\d+/____-___-_-_____/g;
 		s/\d{4}-\d+-\d+/____-___-_/g;
