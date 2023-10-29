@@ -4,7 +4,7 @@ redo-ifchange parsed/*.txt
 
 grep -h 'Message ' parsed/* | \
 	sed -e 's/Message Type/Message_Type/g' |
-	awk '
+	goawk '
 		{ $1 = ""}
 		{
 			if (NR % 2 == 0) {
