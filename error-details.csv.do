@@ -2,7 +2,7 @@ exec >&2
 
 redo-ifchange parsed/*.txt
 
-grep -Eh '(Message |Originating|Transaction Identifier)' parsed/* | \
+grep -Eh '(Message |Originating|Transaction Identifier|Timestamp)' parsed/* | \
 	perl -pe '
 		s/Message Type/Message_Type/g;
 		s/Transaction Identifier/Transaction_Identifier/g;
@@ -22,9 +22,10 @@ grep -Eh '(Message |Originating|Transaction Identifier)' parsed/* | \
 		}
 
 		$1 == "Message_Type" { msgType = sprintf("%s (%s)", $2, MessageType[$2])}
+		$1 == "Timestamp" { timestamp = $2;}
 		$1 == "Originating_Facility" { originatingFacility = substr($0, index($0, $2))}
 		$1 == "Message" { msg = substr($0, index($0, $2))}
 		$1 == "Transaction_Identifier" { txId = $2}
-		NR %4 != 0 { next; }
-		{ print msgType, originatingFacility, txId, msg; }' | \
-		goawk -i csv -o csv 'BEGIN { print "Message Type", "Facility", "Transaction Id", "Error" } { print }' > $3
+		NR %5 != 0 { next; }
+		{ print timestamp, msgType, originatingFacility, txId, msg; }' | \
+		goawk -i csv -o csv 'BEGIN { print "Timestamp", "Message Type", "Facility", "Transaction Id", "Error" } { print }' > $3
