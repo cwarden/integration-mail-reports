@@ -1,0 +1,7 @@
+*.txt
+*.msg
+*.csv
+*.html
+maildir/cur/*
+maildir/new/*
+maildir/tmp/*
