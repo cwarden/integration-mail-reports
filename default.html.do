@@ -5,4 +5,4 @@ INPUT=messages/$MSG.msg
 
 redo-ifchange $INPUT
 
-awk 'BEGIN { output = 0; } /^$/ { output = 1; next } output { print }' $INPUT | base64 -d > $3
+goawk 'BEGIN { output = 0; } /^$/ { output = 1; next } output { print }' $INPUT | base64 -d > $3
